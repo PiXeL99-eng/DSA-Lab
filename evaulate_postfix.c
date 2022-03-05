@@ -54,25 +54,31 @@ int pop(struct Stack* stack)
 void push(struct Stack* stack, int op)
 {
     struct Node* store = (struct Node*)malloc(sizeof(struct Node));
-    store->next = NULL;
-    store->val = op;
 
-    if (!isEmpty(stack)){
-        store->next = stack->head;
-        stack->head = store;
+    if(store){
+        store->next = NULL;
+        store->val = op;
+
+        if (!isEmpty(stack)){
+            store->next = stack->head;
+            stack->head = store;
+        }
+        else{
+            stack->head = store;
+        }
+        stack->top++;
     }
     else{
-        stack->head = store;
+        printf("Out of memory!");
     }
-    stack->top++;
 }
 
 int main(){
 
-    int len, op1, op2;
+    int op1, op2, flag = 1;
     char ch;
     
-    printf("Enter your postfix expression: ");
+    printf("Enter your postfix expression (end it with $): ");
 
     struct Stack *stack = createStack();
 
@@ -94,6 +100,7 @@ int main(){
             op2 = pop(stack);
 
             if(op2 == '$'){
+                flag = 0;
                 break;
             }
 
@@ -123,7 +130,12 @@ int main(){
 
     }while(ch!='$');
 
-    printf("Answer: %d", pop(stack));
+    if(flag == 1){
+        printf("Answer: %d", pop(stack));
+    }
+    else{
+        printf("Invalid expression!");
+    }
 
     return EXIT_SUCCESS;
 }
