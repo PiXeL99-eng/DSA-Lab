@@ -85,56 +85,58 @@ int main(){
     if(stack == NULL){
         printf("Could not create stack!");
     }
-
-    do{
-        scanf("%c", &ch);
-
-        if(isalnum(ch)){
-            push(stack, ch - '0');
-        }
-        else if(ch == '$')
-            break;
-        else{  //this means ch is an operation symbol
-
-            op1 = pop(stack);
-            op2 = pop(stack);
-
-            if(op2 == '$'){
-                flag = 0;
-                break;
-            }
-
-            switch (ch)
-            {
-            case '+':
-                op2 = op2 + op1;
-                break;
-            case '-':
-                op2 = op2 - op1;
-                break;
-            case '/':
-                op2 = op2/op1;
-                break;
-            case '*':
-                op2 = op2 * op1;
-                break;
-            case '^':
-                op2 = pow(op2, op1);
-                break;
-            default:
-                break;
-            }
-            
-            push(stack, op2);
-        }
-
-    }while(ch!='$');
-
-    if(flag == 1){
-        printf("Answer: %d", pop(stack));
-    }
     else{
-        printf("Invalid expression!");
+
+        do{
+            scanf("%c", &ch);
+
+            if(isalnum(ch)){
+                push(stack, ch - '0');
+            }
+            else if(ch == '$')
+                break;
+            else{  //this means ch is an operation symbol
+
+                op1 = pop(stack);
+                op2 = pop(stack);
+
+                if(op2 == '$'){
+                    flag = 0;
+                    break;
+                }
+
+                switch (ch)
+                {
+                case '+':
+                    op2 = op2 + op1;
+                    break;
+                case '-':
+                    op2 = op2 - op1;
+                    break;
+                case '/':
+                    op2 = op2/op1;
+                    break;
+                case '*':
+                    op2 = op2 * op1;
+                    break;
+                case '^':
+                    op2 = pow(op2, op1);
+                    break;
+                default:
+                    break;
+                }
+                
+                push(stack, op2);
+            }
+
+        }while(ch!='$');
+
+        if(flag == 1){
+            printf("Answer: %d", pop(stack));
+        }
+        else{
+            printf("Invalid expression!");
+        }
     }
 
     return EXIT_SUCCESS;

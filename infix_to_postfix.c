@@ -82,50 +82,52 @@ int main(){
     if(stack == NULL){
         printf("Could not create Stack, memory insufficient!");
     }
+    else{
 
-    for( int i=0; i<len; i++){
-        ch = exp[i];
+        for( int i=0; i<len; i++){
+            ch = exp[i];
 
-        if(isalnum(ch)){
-            output[k] = ch;
-            k++;
-        }
-        else if(ch == '('){
-            push(stack, ch);
-        }
-        else if(ch == ')'){
-            temp = pop(stack);
-
-            while(temp!='(' && temp!='$'){
-                output[k] = temp;
+            if(isalnum(ch)){
+                output[k] = ch;
                 k++;
-                temp = pop(stack);
             }
-        }
-        else{  //this means ch is an operation symbol
-            if(prec(peek(stack))<prec(ch)){
+            else if(ch == '('){
                 push(stack, ch);
             }
-            else{
-                while(prec(peek(stack))>=prec(ch) && temp!='$'){
-                    temp = pop(stack);
+            else if(ch == ')'){
+                temp = pop(stack);
+
+                while(temp!='(' && temp!='$'){
                     output[k] = temp;
                     k++;
+                    temp = pop(stack);
+                }
+            }
+            else{  //this means ch is an operation symbol
+                if(prec(peek(stack))<prec(ch)){
+                    push(stack, ch);
+                }
+                else{
+                    while(prec(peek(stack))>=prec(ch) && temp!='$'){
+                        temp = pop(stack);
+                        output[k] = temp;
+                        k++;
+                    }
+
+                    push(stack, ch);
                 }
 
-                push(stack, ch);
             }
 
         }
 
-    }
+        while(!isEmpty(stack)){
+            output[k++] = pop(stack);
+        }
 
-    while(!isEmpty(stack)){
-        output[k++] = pop(stack);
+        output[k] = '\0';
+        printf("%s", output);
     }
-
-    output[k] = '\0';
-    printf("%s", output);
 
     return EXIT_SUCCESS;
 }
