@@ -14,7 +14,6 @@ struct Stack
     struct Node* head;
 };
 
-//function to create a stack with fixed no. of elements i.e. max_stack
 struct Stack* createStack()   //dynamic memory stack
 {
     struct Stack* stack = (struct Stack*)malloc(sizeof(struct Stack));

@@ -13,6 +13,7 @@ int main(){
     int n;
     printf("Enter the number of disks: ");
     scanf(" %d", &n);
+    printf("\n");
 
     hanoi( n, 'A', 'B', 'C');
     return EXIT_SUCCESS;
