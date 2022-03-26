@@ -5,6 +5,7 @@
 // A linked list (LL) node to store a queue entry
 struct QNode {
     int key;
+	int priority;
     struct QNode* next;
 };
  
@@ -15,10 +16,11 @@ struct Queue {
 };
  
 // A utility function to create a new linked list node.
-struct QNode* newNode(int k)
+struct QNode* newNode(int k, int p)
 {
     struct QNode* temp = (struct QNode*)malloc(sizeof(struct QNode));
     temp->key = k;
+	temp->priority = p;
     temp->next = NULL;
     return temp;
 }
@@ -32,7 +34,7 @@ struct Queue* createQueue()
 }
  
 // The function to add a key k to q
-void enQueue(struct Queue* q, int k)
+void enQueue(struct Queue* q, int k, int p)
 {
     // Create a new LL node
  
@@ -40,7 +42,7 @@ void enQueue(struct Queue* q, int k)
 
  	// Else Add the new node at the end of queue and change rear
 
-     struct QNode *node = newNode(k);
+     struct QNode *node = newNode(k, p);
 
      if(q->front == NULL && q->rear == NULL){
          node->next = node;
@@ -52,6 +54,25 @@ void enQueue(struct Queue* q, int k)
          q->rear = node;
      }
     
+}
+
+struct QNode* getMin(struct Queue *q){
+	int prior = INT_MAX;
+
+	struct QNode* node = q->front;
+	struct QNode* res = q->front;
+
+	do{
+		if(node->priority<prior){
+			prior = node->priority;
+			res = node;
+		}
+
+		node = node->next;
+
+	}while(node!=q->front);
+
+	return res;
 }
  
 // Function to remove a key from given queue q
@@ -71,12 +92,35 @@ int deQueue(struct Queue* q)
         q->front = q->rear = NULL;
     }
     else{
-        item = q->front->key;
-        struct QNode *node = q->front;
-        q->front = q->front->next;
-        q->rear->next = q->front;
-        node->next = NULL;
-        free(node);
+        struct QNode *node = getMin(q);
+		item = node->key;
+
+		if(node == q->front){
+			q->rear->next = q->front->next;
+			q->front->next = NULL;
+			free(q->front);
+			q->front = q->rear->next;
+		}
+		else{
+			struct QNode *cur_node = q->front;
+
+			while(cur_node->next!=node){
+				cur_node = cur_node->next;
+			}
+
+			if(node == q->rear){
+				cur_node->next = node->next;
+				node->next = NULL;
+				free(node);
+				q->rear = cur_node;
+			}
+			else{
+				cur_node->next = node->next;
+				node->next = NULL;
+				free(node);
+			}
+
+		}
 
     }
 
@@ -94,7 +138,7 @@ void display(struct Queue* q)
 
         printf("\nQueue is: ");
         do{
-            printf("%d ", node->key);
+            printf("(key = %d, priority = %d) ", node->key, node->priority);
             node = node->next;
 
         }while (node!=q->front);
@@ -106,13 +150,13 @@ void display(struct Queue* q)
 int main()
 {
 	FILE *fptr;
-   	if ((fptr = fopen("circular_queue_LL_input.txt","r")) == NULL)
+   	if ((fptr = fopen("priority_queue_input.txt","r")) == NULL)
    	{
 	   printf("Error! opening file");
        // Program exits if the file pointer returns NULL.
        exit(1);
    	}
-	int choice, data;
+	int choice, data, priority;
 	// Below line may be different but variable name "queue" must be same
 	struct Queue* queue = createQueue();
 	do
@@ -123,10 +167,10 @@ int main()
 		switch(choice)
 		{
 			case 1:
-				printf("\nEnter value to insert: ");
-				fscanf(fptr, "%d",&data);
-				printf("%d", data);
-				enQueue(queue, data);
+				printf("\nEnter value and priority to insert: ");
+				fscanf(fptr, " %d %d",&data, &priority);
+				printf("(data = %d, priority = %d)", data, priority);
+				enQueue(queue, data, priority);
 				break;
 			case 2:
 				data = deQueue(queue);
