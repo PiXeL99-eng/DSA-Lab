@@ -38,9 +38,31 @@ void enQueue(struct Queue* q, int k)
     // Create a new LL node
  
     // Create a pointer to the front node
- 
+    struct QNode* node =  newNode(k);
+    
     // If queue is empty, then new node is front and rear both
- 
+    
+    if(q->front == NULL){
+    	q->front = q->rear = node;
+	}
+	else{
+		
+		
+		if(node->key <= q->front->key){
+			node->next = q->front;
+			q->front = node;
+		}
+		else{
+			struct QNode* store = q->front;
+			
+			while(store->next!=NULL && store->next->key<node->key){
+				store = store->next;
+			}
+			
+			node->next = store->next;
+			store->next = node;
+		}
+	}
  
  
     // ELSE
@@ -65,13 +87,40 @@ void enQueue(struct Queue* q, int k)
 // Function to remove a key from given queue q
 int deQueue(struct Queue* q)
 {
+	int item;
     // If queue is empty, return INT_MIN.
  
     // Store previous front and move front one node ahead
  
     // If front becomes NULL, then change rear also as NULL
- 
- 
+    
+    if(q->front == NULL && q->rear == NULL){
+    	item = INT_MIN;
+	}
+	else{
+		struct QNode* node = q->front;
+		
+		if(node->next == NULL){
+			item = node->key;
+			q->front = NULL;
+			q->rear = NULL;
+			node->next = NULL;
+			free(node);
+		}
+		else{
+			q->front = q->front->next;
+		
+			if(q->front == NULL){
+				q->rear = q->rear->next;
+			}
+			node->next = NULL;
+			item = node->key;
+			free(node);
+		}
+		
+	}
+	
+	return item;
 	// Free node
  
     // Return removed value
@@ -81,8 +130,22 @@ void display(struct Queue* q)
 {
 	// If queue is empty, print "Queue is Empty" in this function.
  
- 
- 
+ 	if(q->front == NULL && q->rear == NULL){
+        printf("\nQueue is Empty!\n");
+    }
+    else{
+        struct QNode *node = q->front;
+
+        printf("\nQueue is: ");
+        do{
+            printf("%d ", node->key);
+            node = node->next;
+
+        }while (node!=NULL);
+        
+        printf("\n");
+	}
+
 	// Else traverse the list and print each element
  
 }
@@ -121,7 +184,7 @@ int main()
 					display(queue);
 				}
 				else
-					printf("\nQueue is empty");
+					printf("\nQueue is Empty!");
 				break;
 			case 3:
 				display(queue);
