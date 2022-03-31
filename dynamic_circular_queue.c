@@ -67,7 +67,6 @@ int deQueue(struct Queue* q)
         item = q->front->key;
         q->front->next = q->rear->next = NULL;
         free(q->front);
-        free(q->rear);
         q->front = q->rear = NULL;
     }
     else{
