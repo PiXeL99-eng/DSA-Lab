@@ -1,0 +1,22 @@
+Creating Binary Search Tree
+Inorder traversal of the given tree
+20 30 40 50 60 70 80
+Searching for key: 40
+Node: 50
+Node: 30
+Node: 40
+Found 40 in Binary Search tree
+Searching for key: 1234
+Node: 50
+Node: 70
+Node: 80
+1234 not found
+Deleting 20 (node with 0 child)
+Inorder traversal of the modified tree
+30 40 50 60 70 80
+Deleting 30 (node with 1 child)
+Inorder traversal of the modified tree
+40 50 60 70 80
+Delete 70 (node with 2 children)
+Inorder traversal of the modified tree
+40 50 60 80
